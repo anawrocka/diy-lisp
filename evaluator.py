@@ -52,7 +52,11 @@ def evaluate(ast, env):
                 else: raise LispError ("non-symbol")
             else: raise LispError("Wrong number of arguments")
         if ast[0] == 'lambda':
-            return Closure(env, ast[1], ast[2])
+            if is_list(ast[1]):
+                if len(ast) == 3:
+                    return Closure(env, ast[1], ast[2])
+                else: raise LispError("number of arguments")
+            else: raise LispError("Not a list")
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
