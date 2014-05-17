@@ -39,6 +39,10 @@ def evaluate(ast, env):
             if is_integer(ast1) and is_integer(ast2):
                 return evaluate_math(op, ast1, ast2)
             else: raise LispError
+        if ast[0] == 'if':
+            if evaluate(ast[1], env) == True:
+                return evaluate(ast[2], env)
+            else: return evaluate(ast[3], env)
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
