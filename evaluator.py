@@ -47,7 +47,9 @@ def evaluate(ast, env):
             else: return evaluate(ast[3], env)
         if ast[0] == 'define':
             if len(ast) == 3:
-                return env.set(ast[1], ast[2])
+                if is_symbol(ast[1]) and not is_boolean(ast[1]):
+                    return env.set(ast[1], evaluate(ast[2], env))
+                else: raise LispError ("non-symbol")
             else: raise LispError("Wrong number of arguments")
             
 def evaluate_math(op, arg1, arg2):
