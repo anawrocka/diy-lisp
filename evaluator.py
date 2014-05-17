@@ -51,6 +51,8 @@ def evaluate(ast, env):
                     return env.set(ast[1], evaluate(ast[2], env))
                 else: raise LispError ("non-symbol")
             else: raise LispError("Wrong number of arguments")
+        if ast[0] == 'lambda':
+            return Closure(env, ast[1], ast[2])
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
