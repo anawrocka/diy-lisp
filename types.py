@@ -30,7 +30,9 @@ class Environment:
         else: raise LispError("%s" % symbol)
 
     def extend(self, variables):
-        raise NotImplementedError("DIY")
+        for var, val in variables.iteritems():
+            self.variables[var] = val
+            return Environment(self.variables)
 
     def set(self, symbol, value):
         raise NotImplementedError("DIY")
