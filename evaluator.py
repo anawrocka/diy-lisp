@@ -26,5 +26,12 @@ def evaluate(ast, env):
             if is_list(atom_part):
                 return False
             else: return True
+        if ast[0] == "eq":
+            ast1 = evaluate(ast[1], env)
+            ast2 = evaluate(ast[2], env)
+            if ast1 == ast2 and is_atom(ast1) and is_atom(ast2):
+                return True
+            else: return False
+        
         
             
