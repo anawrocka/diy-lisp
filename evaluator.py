@@ -45,6 +45,10 @@ def evaluate(ast, env):
             if evaluate(ast[1], env) == True:
                 return evaluate(ast[2], env)
             else: return evaluate(ast[3], env)
+        if ast[0] == 'define':
+            if len(ast) == 3:
+                return env.set(ast[1], ast[2])
+            else: raise LispError("Wrong number of arguments")
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
