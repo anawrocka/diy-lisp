@@ -57,6 +57,15 @@ def evaluate(ast, env):
                     return Closure(env, ast[1], ast[2])
                 else: raise LispError("number of arguments")
             else: raise LispError("Not a list")
+        if is_closure(ast[0]):
+            closure = ast[0]
+            if len(closure.params) == 0:
+                return evaluate(closure.body, env)
+            else:
+                new_vars = zip(closure.params, ast[1:])
+                for item in new_vars:
+                    env.set(item[0], evaluate(item[1], env))
+                return evaluate(closure.body, env)
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
