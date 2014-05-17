@@ -32,6 +32,30 @@ def evaluate(ast, env):
             if ast1 == ast2 and is_atom(ast1) and is_atom(ast2):
                 return True
             else: return False
+        if ast[0] in ['+', '-', '/', '*', 'mod', '>', '<']:
+            op = ast[0]
+            ast1 = evaluate(ast[1], env)
+            ast2 = evaluate(ast[2], env)
+            if is_integer(ast1) and is_integer(ast2):
+                return evaluate_math(op, ast1, ast2)
+            else: raise LispError
+            
+def evaluate_math(op, arg1, arg2):
+    if op == '+':
+        return arg1 + arg2
+    if op == '-':
+        return arg1 - arg2
+    if op == '*':
+        return arg1 * arg2
+    if op == '/':
+        return arg1 / arg2
+    if op == 'mod':
+        return arg1 % arg2
+    if op == '>':
+        return arg1 > arg2
+    if op == '<':
+        return arg1 < arg2
+
         
         
             
