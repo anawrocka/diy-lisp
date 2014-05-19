@@ -25,11 +25,13 @@ def evaluate(ast, env):
             closure = ast
             if len(closure.params) == 0:
                 return evaluate(closure.body, closure.env)
-            else:
+            elif len(closure.body[1:]) == len(closure.params):
                 new_vars = zip(closure.body[1:], closure.params)
                 for item in new_vars:
                     closure.env.set(item[0], evaluate(item[1], closure.env))
                 return evaluate(closure.body, closure.env)
+            else:
+                raise LispError("wrong number of arguments, expected %s got %d" % (len(closure.body), len(closure.params)))
     if is_list(ast):
         if ast[0] == "quote":
             return ast[1]
