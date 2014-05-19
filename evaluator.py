@@ -20,6 +20,15 @@ def evaluate(ast, env):
         return ast
     if is_symbol(ast):
         return env.lookup(ast)
+    if is_closure(ast):
+            closure = ast
+            if len(closure.params) == 0:
+                return evaluate(closure.body, closure.env)
+            else:
+                new_vars = zip(closure.body[1:], closure.params)
+                for item in new_vars:
+                    closure.env.set(item[0], evaluate(item[1], closure.env))
+                return evaluate(closure.body, closure.env)
     if is_list(ast):
         if ast[0] == "quote":
             return ast[1]
@@ -54,7 +63,9 @@ def evaluate(ast, env):
         if ast[0] == 'lambda':
             if is_list(ast[1]):
                 if len(ast) == 3:
-                    return Closure(env, ast[1], ast[2])
+                    params = ast[1] 
+                    body = ast[2] 
+                    return Closure(env, params, body)
                 else: raise LispError("number of arguments")
             else: raise LispError("Not a list")
         if is_closure(ast[0]):
@@ -66,6 +77,10 @@ def evaluate(ast, env):
                 for item in new_vars:
                     closure.env.set(item[0], evaluate(item[1], closure.env))
                 return evaluate(closure.body, closure.env)
+        if is_symbol(ast[0]):
+            closure = env.lookup(ast[0])
+            closure.params = ast[1:]
+            return evaluate(closure, closure.env)
             
 def evaluate_math(op, arg1, arg2):
     if op == '+':
