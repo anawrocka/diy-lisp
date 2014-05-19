@@ -4,6 +4,7 @@ from types import Environment, LispError, Closure
 from ast import is_boolean, is_atom, is_symbol, is_list, is_closure, is_integer
 from asserts import assert_exp_length, assert_valid_definition, assert_boolean
 from parser import unparse
+import itertools
 
 """
 This is the Evaluator module. The `evaluate` function below is the heart
@@ -82,8 +83,14 @@ def evaluate(ast, env):
             closure.params = ast[1:]
             return evaluate(closure, closure.env)
         if is_list(ast[0]):
-            closure = evaluate(ast[0], env)
-            return evaluate([closure, int(''.join(map(str,ast[1:])))], env)
+            if is_integer(ast[1]):
+                closure = evaluate(ast[0], env)
+                return evaluate([closure, int(''.join(map(str,ast[1:])))], env)
+            else:
+                closure = evaluate(ast[0], env)
+                args = list(itertools.chain(*ast[1:]))
+                return evaluate([closure, args], env)
+        else: raise LispError("not a function")
 
 def evaluate_math(op, arg1, arg2):
     if op == '+':
