@@ -81,7 +81,10 @@ def evaluate(ast, env):
             closure = env.lookup(ast[0])
             closure.params = ast[1:]
             return evaluate(closure, closure.env)
-            
+        if is_list(ast[0]):
+            closure = evaluate(ast[0], env)
+            return evaluate([closure, int(''.join(map(str,ast[1:])))], env)
+
 def evaluate_math(op, arg1, arg2):
     if op == '+':
         return arg1 + arg2
