@@ -80,6 +80,11 @@ def evaluate(ast, env):
                 for item in new_vars:
                     closure.env.set(item[0], evaluate(item[1], closure.env))
                 return evaluate(closure.body, closure.env)
+        if ast[0] == 'cons':
+            l1 = evaluate(ast[2], env)
+            l2 = [evaluate(ast[1], env)]
+            return l2 + l1
+        
         if is_symbol(ast[0]):
             closure = env.lookup(ast[0])
             closure.params = ast[1:]
@@ -93,6 +98,7 @@ def evaluate(ast, env):
                 args = list(itertools.chain(*ast[1:]))
                 return evaluate([closure, args], env)
         else: raise LispError("not a function")
+ 
 
 def evaluate_math(op, arg1, arg2):
     if op == '+':
