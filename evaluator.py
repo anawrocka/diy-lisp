@@ -81,10 +81,26 @@ def evaluate(ast, env):
                     closure.env.set(item[0], evaluate(item[1], closure.env))
                 return evaluate(closure.body, closure.env)
         if ast[0] == 'cons':
-            l1 = evaluate(ast[2], env)
-            l2 = [evaluate(ast[1], env)]
-            return l2 + l1
-        
+            list1 = evaluate(ast[2], env)
+            list2 = [evaluate(ast[1], env)]
+            return list2 + list1
+        if ast[0] == 'head':
+            list1 = evaluate(ast[1], env)
+            if list1 == []:
+                raise LispError
+            else:
+                return list1[0]
+        if ast[0] == 'tail':
+            list1 = evaluate(ast[1], env)
+            if list1 == []:
+                raise LispError
+            else:
+                return list1[1:]
+        if ast[0] == 'empty':
+            list1 = evaluate(ast[1], env)
+            if list1 == []:
+                return True
+            else: return False
         if is_symbol(ast[0]):
             closure = env.lookup(ast[0])
             closure.params = ast[1:]
