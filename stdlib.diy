@@ -9,5 +9,32 @@
 
 (define and 
 	(lambda (l r)
-		(if l (if r #t #f) #f)))
+		(if l r #f)))
 		
+(define or
+	(lambda (l r)
+		(if l #t r)))
+			
+(define xor
+	(lambda (l r)
+		(if l (if r #f #t) r)))
+
+(define <
+	(lambda (l r)
+		(< l r)))
+
+(define >=
+	(lambda (l r)
+		(if (< l r) #f #t)))
+
+(define <=
+	(lambda (l r)
+		(if (> l r) #f #t)))
+
+(define sum
+	(lambda (l)
+		(if (empty l) 0 (+ (head l) (sum (tail l))))))
+
+(define length
+	(lambda (l)
+		(if (empty l) 0 (+ 1 (length (tail l))))))
