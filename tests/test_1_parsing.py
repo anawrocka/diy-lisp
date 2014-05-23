@@ -2,8 +2,9 @@
 
 from nose.tools import assert_equals, assert_raises_regexp
 
-from diylisp.parser import parse, unparse
-from diylisp.types import LispError
+from types import LispError
+from parser import parse, unparse
+
 
 def test_parse_single_symbol():
     """Parsing a single symbol.
