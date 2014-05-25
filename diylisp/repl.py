@@ -10,7 +10,10 @@ from interpreter import interpret, interpret_file
 
 # importing this gives readline goodness when running on systems
 # where it is supported (i.e. UNIX-y systems)
-import readline
+try:
+    import readline
+except ImportError:
+    pass
 
 def repl():
     """Start the interactive Read-Eval-Print-Loop"""
@@ -24,7 +27,10 @@ def repl():
     print
 
     env = Environment()
-    interpret_file(join(dirname(relpath(__file__)), '..', 'stdlib.diy'), env)
+    try:
+        interpret_file(join(dirname(relpath(__file__)), '..', 'stdlib.diy'), env)
+    except LispError:
+        pass
     while True:
         try:
             source = read_expression()
@@ -40,7 +46,7 @@ def repl():
             print faded("\nBye! o/")
             sys.exit(0)
         except Exception, e:
-            print colored("! ", "red") + faded("The Python is showing through…")
+            print colored("! ", "red") + faded("The Python is showing through...")
             print faded("  " + str(e.__class__.__name__) + ":"),
             print str(e)
 
@@ -50,7 +56,7 @@ def read_expression():
     exp = ""
     open_parens = 0
     while True:
-        line, parens = read_line("→  " if not exp.strip() else "…  ")
+        line, parens = read_line(">  " if not exp.strip() else "...  ")
         open_parens += parens
         exp += line
         if exp.strip() and open_parens <= 0:
@@ -84,7 +90,7 @@ def colored(text, color, attr=None):
     }
     format = '\033[%dm'
 
-    if os.getenv('ANSI_COLORS_DISABLED'):
+    if os.getenv('ANSI_COLORS_DISABLED') or sys.platform == 'win32':
         return text
 
     color = format % colors[color]

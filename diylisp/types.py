@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from itertools import chain
+
 """
 This module holds some types we'll have use for along the way.
 
@@ -29,17 +31,15 @@ class Environment:
     def lookup(self, symbol):
         if symbol in self.variables:
             return self.variables[symbol]
-        else: raise LispError("%s" % symbol)
+        else:
+            raise LispError(symbol)
 
     def extend(self, variables):
-        envi = self.variables.copy()
-        for var, val in variables.iteritems():
-            envi[var] = val
-            return Environment(envi)
+        return Environment(
+                dict(chain(self.variables.iteritems(), variables.iteritems())))
 
     def set(self, symbol, value):
         if symbol in self.variables:
-            raise LispError("already defined")
+            raise LispError('already defined: %s' % symbol)
         else:
             self.variables[symbol] = value
-            return self.variables

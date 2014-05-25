@@ -38,3 +38,24 @@
 (define length
 	(lambda (l)
 		(if (empty l) 0 (+ 1 (length (tail l))))))
+		
+(define append
+	(lambda (l r)
+		(if (empty l) r (if (empty (tail l)) 
+						(cons l r) 
+						(cons (head l) (append (tail l) r))))))
+						
+(define filter
+	(lambda (l r)
+		(if (empty r) r (if (l (head r)) 
+							(cons (head r) (filter l (tail r))) 
+							(filter l (tail r))))))
+							
+(define map
+	(lambda (l r)
+		(if (empty r) r (if (empty (tail r)) 
+							(l r)
+							(cons (l (head r)) (map l (tail r)))))))
+							
+
+							
